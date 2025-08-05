@@ -14,7 +14,6 @@ public class AuthController {
     @Autowired
     public AuthController(AuthService theAuthService){authService=theAuthService;}
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));

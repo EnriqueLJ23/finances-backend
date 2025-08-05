@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
+
 public class BudgetRestController {
     //create field for the budget service
-    private BudgetService budgetService;
+    private final BudgetService budgetService;
 
     //inject the budget service
     @Autowired
@@ -27,10 +29,10 @@ public class BudgetRestController {
         return budgetService.findAll();
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+
     @GetMapping("/testing")
-    public String tests(){
-        return "Testing the api auth";
+    public Map<String, String> tests(){
+        return Map.of("message", "Testing the api auth");
     }
 
 }

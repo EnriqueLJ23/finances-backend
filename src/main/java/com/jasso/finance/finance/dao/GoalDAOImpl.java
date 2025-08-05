@@ -3,6 +3,7 @@ package com.jasso.finance.finance.dao;
 import com.jasso.finance.finance.entity.Goal;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -32,11 +33,14 @@ public class GoalDAOImpl implements GoalDAO{
         return entityManager.find(Goal.class,id);
     }
 
+    @Transactional
     @Override
-    public void save(Goal theGoal) {
-        entityManager.persist(theGoal);
-    }
+    public Goal save(Goal theGoal) {
 
+        Goal tempGoal = entityManager.merge(theGoal);
+        return tempGoal;
+    }
+@Transactional
     @Override
     public void remove(Integer id) {
         //find goal by id

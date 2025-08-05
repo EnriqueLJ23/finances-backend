@@ -29,8 +29,9 @@ public class GoalServiceImpl implements GoalService {
     }
 
     @Override
-    public void save(Goal theGoal) {
+    public Goal save(Goal theGoal) {
         goalDAO.save(theGoal);
+        return theGoal;
     }
 
     @Override

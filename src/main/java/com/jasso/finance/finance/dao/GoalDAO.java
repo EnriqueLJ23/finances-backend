@@ -8,7 +8,7 @@ public interface GoalDAO {
 
     Goal findById(Integer id);
 
-    void save(Goal theGoal);
+    Goal save(Goal theGoal);
 
     void remove(Integer id);
 }

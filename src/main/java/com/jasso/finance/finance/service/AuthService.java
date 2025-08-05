@@ -41,14 +41,23 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest loginRequest) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),loginRequest.getPassword()));
-        UserDetails user = userRepository.findByUsername(loginRequest.getUsername()).orElseThrow();
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        User user = userRepository.findByUsername(loginRequest.getUsername()).orElseThrow();
         String token = jwtService.getToken(user);
+
         AuthResponse authResponse = new AuthResponse();
         authResponse.setToken(token);
+        authResponse.setId(user.getId());
         authResponse.setUsername(user.getUsername());
         return authResponse;
     }
+
 
     public AuthResponse register(RegisterRequest registerRequest) {
         User user = new User();

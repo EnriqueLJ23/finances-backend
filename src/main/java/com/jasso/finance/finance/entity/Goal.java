@@ -3,6 +3,7 @@ package com.jasso.finance.finance.entity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "goals")
@@ -14,29 +15,30 @@ public class Goal {
     private int id;
 
     @Column(name = "user_id")
-    private String user_id;
+    private int user_id;
 
-    @Column(name = "category")
-    private String category;
+    @Column(name = "title")
+    private String title;
 
-    @Column(name = "amount")
-    private BigDecimal amount;
+    @Column(name = "target_amount")
+    private BigDecimal target_amount;
 
-    @Column(name = "month")
-    private int month;
+    @Column(name = "current_amount")
+    private BigDecimal current_amount;
 
-    @Column(name = "year")
-    private int year;
+    @Column(name = "due_date")
+    private LocalDate date;
+
 
     //define the contructors
     public Goal(){}
 
-    public Goal(String user_id, String category, BigDecimal amount, int month, int year) {
+    public Goal(int user_id, String title, BigDecimal target_amount, BigDecimal current_amount, LocalDate date) {
         this.user_id = user_id;
-        this.category = category;
-        this.amount = amount;
-        this.month = month;
-        this.year = year;
+        this.title = title;
+        this.target_amount = target_amount;
+        this.current_amount = current_amount;
+        this.date = date;
     }
 
     //define the getter and setters for the entity
@@ -50,43 +52,43 @@ public class Goal {
         this.id = id;
     }
 
-    public String getUser_id() {
+    public int getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(String user_id) {
+    public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
 
-    public String getCategory() {
-        return category;
+    public BigDecimal getTarget_amount() {
+        return target_amount;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setTarget_amount(BigDecimal target_amount) {
+        this.target_amount = target_amount;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getCurrent_amount() {
+        return current_amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setCurrent_amount(BigDecimal current_amount) {
+        this.current_amount = current_amount;
     }
 
-    public int getMonth() {
-        return month;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setMonth(int month) {
-        this.month = month;
+    public String getTitle() {
+        return title;
     }
 
-    public int getYear() {
-        return year;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }
