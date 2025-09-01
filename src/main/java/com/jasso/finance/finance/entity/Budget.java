@@ -26,6 +26,8 @@ public class Budget {
 
     @Column(name = "year")
     private int year;
+    @Transient
+    private BigDecimal used;
 
     //define constructors
     //empty one required by jpa
@@ -39,6 +41,7 @@ public class Budget {
         this.amount = amount;
         this.month = month;
         this.year = year;
+        this.used = BigDecimal.ZERO;
     }
 
     //define the getters and setters
@@ -90,5 +93,13 @@ public class Budget {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public BigDecimal getUsed() {
+        return used;
+    }
+
+    public void setUsed(BigDecimal used) {
+        this.used = used;
     }
 }

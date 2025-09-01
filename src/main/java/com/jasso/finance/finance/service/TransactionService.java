@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface TransactionService {
     List<Transaction> findAll();
+    
+    List<Transaction> findByUserId(Integer userId);
 
     Transaction findById(Integer id);
 

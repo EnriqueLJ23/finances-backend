@@ -55,6 +55,7 @@ public class AuthService {
         authResponse.setToken(token);
         authResponse.setId(user.getId());
         authResponse.setUsername(user.getUsername());
+        authResponse.setExpiresAt(jwtService.getTokenExpiration());
         return authResponse;
     }
 
@@ -71,6 +72,9 @@ public class AuthService {
 
         AuthResponse response = new AuthResponse();
         response.setToken(jwtService.getToken(user));
+        response.setId(user.getId());
+        response.setUsername(user.getUsername());
+        response.setExpiresAt(jwtService.getTokenExpiration());
         return response;
     }
 

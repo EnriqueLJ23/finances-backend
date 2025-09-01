@@ -2,6 +2,7 @@ package com.jasso.finance.finance.service;
 
 import com.jasso.finance.finance.dao.TransactionDAO;
 import com.jasso.finance.finance.entity.Transaction;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,11 @@ public class TransactionServiceImpl implements TransactionService{
     public List<Transaction> findAll() {
         return transactionDAO.findAll();
     }
+    
+    @Override
+    public List<Transaction> findByUserId(Integer userId) {
+        return transactionDAO.findByUserId(userId);
+    }
 
     @Override
     public Transaction findById(Integer id) {
@@ -29,10 +35,11 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
+    @Transactional
     public void save(Transaction theTransaction) {
         transactionDAO.save(theTransaction);
     }
-
+    @Transactional
     @Override
     public void remove(Integer id) {
         transactionDAO.remove(id);

@@ -2,11 +2,9 @@ package com.jasso.finance.finance.rest;
 
 import com.jasso.finance.finance.entity.Budget;
 import com.jasso.finance.finance.service.BudgetService;
+import com.jasso.finance.finance.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -25,14 +23,60 @@ public class BudgetRestController {
     }
 
     @GetMapping("/budgets")
-    public List<Budget> getBudgets(){
-        return budgetService.findAll();
+    public List<Budget> getBudgets(
+            @RequestParam(required = false) Integer month,
+            @RequestParam(required = false) Integer year){
+        
+        Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
+        
+        if (month != null && year != null) {
+            return budgetService.findByUserIdAndMonthAndYear(Integer.valueOf(String.valueOf(authenticatedUserId)), month, year);
+        }
+        return budgetService.findAll(Integer.valueOf(String.valueOf(authenticatedUserId)));
     }
 
+    @PostMapping("/budgets")
+    public Budget addBudget(@RequestBody Budget theBudget){
+        Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
+        theBudget.setUser_id(String.valueOf(authenticatedUserId));
+        Budget newBudget = budgetService.save(theBudget);
+        return newBudget;
+    }
 
-    @GetMapping("/testing")
-    public Map<String, String> tests(){
-        return Map.of("message", "Testing the api auth");
+    @PutMapping("/budgets/{budgetId}")
+    public Budget updateBudget(@PathVariable int budgetId, @RequestBody Budget theBudget){
+        Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
+        
+        Budget existingBudget = budgetService.findById(budgetId);
+        if(existingBudget == null){
+            throw new RuntimeException("Budget id not found - " + budgetId);
+        }
+        
+        if(!existingBudget.getUser_id().equals(String.valueOf(authenticatedUserId))){
+            throw new SecurityException("Unauthorized access to budget");
+        }
+        
+        theBudget.setId(budgetId);
+        theBudget.setUser_id(String.valueOf(authenticatedUserId));
+        Budget updatedBudget = budgetService.save(theBudget);
+        return updatedBudget;
+    }
+
+    @DeleteMapping("/budgets/{budgetId}")
+    public Map<String, String> deleteBudget(@PathVariable int budgetId){
+        Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
+        
+        Budget tempBudget = budgetService.findById(budgetId);
+        if(tempBudget == null){
+            throw new RuntimeException("Budget id not found - " + budgetId);
+        }
+        
+        if(!tempBudget.getUser_id().equals(String.valueOf(authenticatedUserId))){
+            throw new SecurityException("Unauthorized access to budget");
+        }
+        
+        budgetService.remove(budgetId);
+        return Map.of("message", "Budget deleted successfully");
     }
 
 }

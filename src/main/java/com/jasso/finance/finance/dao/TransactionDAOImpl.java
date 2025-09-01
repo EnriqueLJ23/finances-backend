@@ -26,6 +26,13 @@ public class TransactionDAOImpl implements TransactionDAO{
         //return the results in a list
         return query.getResultList();
     }
+    
+    @Override
+    public List<Transaction> findByUserId(Integer userId) {
+        TypedQuery<Transaction> query = entityManager.createQuery("FROM Transaction WHERE user_id = :userId", Transaction.class);
+        query.setParameter("userId", String.valueOf(userId));
+        return query.getResultList();
+    }
 
     @Override
     public Transaction findById(Integer id) {

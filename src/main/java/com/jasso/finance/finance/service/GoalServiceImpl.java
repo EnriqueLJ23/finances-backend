@@ -19,8 +19,13 @@ public class GoalServiceImpl implements GoalService {
     }
 
     @Override
-    public List<Goal> findAll() {
-        return goalDAO.findAll();
+    public List<Goal> findAll(Integer id) {
+        return goalDAO.findAll(id);
+    }
+
+    @Override
+    public List<Goal> findByUserIdAndMonthAndYear(Integer userId, Integer month, Integer year) {
+        return goalDAO.findByUserIdAndMonthAndYear(userId, month, year);
     }
 
     @Override
@@ -30,8 +35,8 @@ public class GoalServiceImpl implements GoalService {
 
     @Override
     public Goal save(Goal theGoal) {
-        goalDAO.save(theGoal);
-        return theGoal;
+       Goal tempGoal = goalDAO.save(theGoal);
+        return tempGoal;
     }
 
     @Override

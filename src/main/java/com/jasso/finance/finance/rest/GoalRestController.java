@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jasso.finance.finance.entity.Goal;
 import com.jasso.finance.finance.service.GoalService;
+import com.jasso.finance.finance.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,36 +25,67 @@ public class GoalRestController {
     }
 
     @GetMapping("/goals")
-    public List<Goal> getGoals(){
-        return goalService.findAll();
+    public List<Goal> getGoals(
+            @RequestParam(required = false) Integer month,
+            @RequestParam(required = false) Integer year){
+        
+        Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
+        
+        if (month != null && year != null) {
+            return goalService.findByUserIdAndMonthAndYear(authenticatedUserId.intValue(), month, year);
+        }
+        return goalService.findAll(authenticatedUserId.intValue());
     }
 
     @PostMapping("/goals")
     public Goal addGoal(@RequestBody Goal theGoal){
+        Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
+        theGoal.setUser_id(authenticatedUserId.intValue());
         Goal newGoal = goalService.save(theGoal);
         return newGoal;
     }
 
     //add mapping for the PUT resquest, updating a goal
     @PutMapping("/goals")
-    public Goal updateEmployee(@RequestBody Goal theGoal) {
+    public Goal updateGoal(@RequestBody Goal theGoal) {
+        Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
+        
+        Goal existingGoal = goalService.findById(theGoal.getId());
+        if(existingGoal == null){
+            throw new RuntimeException("Goal not found - " + theGoal.getId());
+        }
+        
+        if(existingGoal.getUser_id() != authenticatedUserId.intValue()){
+            throw new SecurityException("Unauthorized access to goal");
+        }
+        
+        theGoal.setUser_id(authenticatedUserId.intValue());
         Goal newGoal = goalService.save(theGoal);
-
         return newGoal;
     }
 
     //add mapping for the PATCH method, updating specific part of an employee
     @PatchMapping("/goals/{goalId}")
-    public Goal patchEmployee(@PathVariable int goalId,
+    public Goal patchGoal(@PathVariable int goalId,
                                   @RequestBody Map<String, Object> patchPayload) {
+        Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
+        
         Goal tempGoal = goalService.findById(goalId);
 
         if (tempGoal == null){
             throw new RuntimeException("goal not found");
         }
+        
+        if(tempGoal.getUser_id() != authenticatedUserId.intValue()){
+            throw new SecurityException("Unauthorized access to goal");
+        }
 
         if (patchPayload.containsKey("id")){
-            throw new RuntimeException("employee id not allowed in the payload");
+            throw new RuntimeException("goal id not allowed in the payload");
+        }
+        
+        if (patchPayload.containsKey("userId")){
+            throw new RuntimeException("userId not allowed in the payload");
         }
 
         Goal patchedGoal = apply(patchPayload, tempGoal);
@@ -64,11 +96,18 @@ public class GoalRestController {
 
     @DeleteMapping("/goals/{goalId}")
     public Map<String, String> deleteGoal(@PathVariable int goalId) {
+        Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
+        
         Goal tempGoal = goalService.findById(goalId);
 
         if (tempGoal == null){
             throw new RuntimeException("this goal doesn't exist");
         }
+        
+        if(tempGoal.getUser_id() != authenticatedUserId.intValue()){
+            throw new SecurityException("Unauthorized access to goal");
+        }
+        
         goalService.remove(goalId);
 
         return Map.of("message", "Goal: " + tempGoal.getTitle() + " Deleted from the database");

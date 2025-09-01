@@ -5,11 +5,13 @@ import com.jasso.finance.finance.entity.Budget;
 import java.util.List;
 
 public interface BudgetService {
-    List<Budget> findAll();
+    List<Budget> findAll(Integer id);
+    
+    List<Budget> findByUserIdAndMonthAndYear(Integer userId, Integer month, Integer year);
 
     Budget findById(Integer id);
 
-    void save(Budget theBudget);
+    Budget save(Budget theBudget);
 
     void remove(Integer id);
 }
