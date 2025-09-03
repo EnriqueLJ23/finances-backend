@@ -5,9 +5,9 @@ import com.jasso.finance.finance.entity.Goal;
 import java.util.List;
 
 public interface GoalService {
-    List<Goal> findAll(Integer id);
+    List<Goal> findAll(Long id);
     
-    List<Goal> findByUserIdAndMonthAndYear(Integer userId, Integer month, Integer year);
+    List<Goal> findByUserIdAndMonthAndYear(Long userId, Integer month, Integer year);
 
     Goal findById(Integer id);
 

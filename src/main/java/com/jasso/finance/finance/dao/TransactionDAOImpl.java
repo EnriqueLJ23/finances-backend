@@ -28,9 +28,9 @@ public class TransactionDAOImpl implements TransactionDAO{
     }
     
     @Override
-    public List<Transaction> findByUserId(Integer userId) {
+    public List<Transaction> findByUserId(Long userId) {
         TypedQuery<Transaction> query = entityManager.createQuery("FROM Transaction WHERE user_id = :userId", Transaction.class);
-        query.setParameter("userId", String.valueOf(userId));
+        query.setParameter("userId", userId);
         return query.getResultList();
     }
 
@@ -41,7 +41,7 @@ public class TransactionDAOImpl implements TransactionDAO{
 
     @Override
     public void save(Transaction theTransaction) {
-        entityManager.persist(theTransaction);
+        entityManager.merge(theTransaction);
     }
 
     @Override

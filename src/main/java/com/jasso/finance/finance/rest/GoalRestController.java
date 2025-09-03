@@ -32,15 +32,15 @@ public class GoalRestController {
         Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
         
         if (month != null && year != null) {
-            return goalService.findByUserIdAndMonthAndYear(authenticatedUserId.intValue(), month, year);
+            return goalService.findByUserIdAndMonthAndYear(authenticatedUserId, month, year);
         }
-        return goalService.findAll(authenticatedUserId.intValue());
+        return goalService.findAll(authenticatedUserId);
     }
 
     @PostMapping("/goals")
     public Goal addGoal(@RequestBody Goal theGoal){
         Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
-        theGoal.setUser_id(authenticatedUserId.intValue());
+        theGoal.setUser_id(authenticatedUserId);
         Goal newGoal = goalService.save(theGoal);
         return newGoal;
     }
@@ -55,11 +55,11 @@ public class GoalRestController {
             throw new RuntimeException("Goal not found - " + theGoal.getId());
         }
         
-        if(existingGoal.getUser_id() != authenticatedUserId.intValue()){
+        if(!existingGoal.getUser_id().equals(authenticatedUserId)){
             throw new SecurityException("Unauthorized access to goal");
         }
         
-        theGoal.setUser_id(authenticatedUserId.intValue());
+        theGoal.setUser_id(authenticatedUserId);
         Goal newGoal = goalService.save(theGoal);
         return newGoal;
     }
@@ -76,7 +76,7 @@ public class GoalRestController {
             throw new RuntimeException("goal not found");
         }
         
-        if(tempGoal.getUser_id() != authenticatedUserId.intValue()){
+        if(!tempGoal.getUser_id().equals(authenticatedUserId)){
             throw new SecurityException("Unauthorized access to goal");
         }
 
@@ -104,7 +104,7 @@ public class GoalRestController {
             throw new RuntimeException("this goal doesn't exist");
         }
         
-        if(tempGoal.getUser_id() != authenticatedUserId.intValue()){
+        if(!tempGoal.getUser_id().equals(authenticatedUserId)){
             throw new SecurityException("Unauthorized access to goal");
         }
         

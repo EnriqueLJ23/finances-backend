@@ -15,13 +15,31 @@ public class AuthController {
     public AuthController(AuthService theAuthService){authService=theAuthService;}
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(authService.login(loginRequest));
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            AuthResponse response = authService.login(loginRequest);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // Return a proper error response for authentication failures
+            String errorMessage = "Invalid username or password";
+            if (e.getMessage().contains("Bad credentials")) {
+                errorMessage = "Invalid username or password";
+            } else if (e.getMessage().contains("User not found")) {
+                errorMessage = "User not found";
+            }
+            return ResponseEntity.badRequest().body(new ErrorResponse(errorMessage));
+        }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest registerRequest) {
-        return ResponseEntity.ok(authService.register(registerRequest));
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
+        try {
+            AuthResponse response = authService.register(registerRequest);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            // Return a proper error response
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        }
     }
 
 

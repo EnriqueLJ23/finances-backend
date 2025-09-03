@@ -21,7 +21,7 @@ public class GoalDAOImpl implements GoalDAO{
     }
 
     @Override
-    public List<Goal> findAll(Integer id) {
+    public List<Goal> findAll(Long id) {
         //retrieve the goals
         TypedQuery<Goal> query = entityManager.createQuery("FROM Goal g WHERE g.user_id = :userId", Goal.class);
         query.setParameter("userId", id);
@@ -30,7 +30,7 @@ public class GoalDAOImpl implements GoalDAO{
     }
 
     @Override
-    public List<Goal> findByUserIdAndMonthAndYear(Integer userId, Integer month, Integer year) {
+    public List<Goal> findByUserIdAndMonthAndYear(Long userId, Integer month, Integer year) {
         TypedQuery<Goal> query = entityManager.createQuery(
             "FROM Goal g WHERE g.user_id = :userId AND MONTH(g.date) = :month AND YEAR(g.date) = :year", 
             Goal.class

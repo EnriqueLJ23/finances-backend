@@ -23,7 +23,7 @@ public class BudgetDAOImpl implements BudgetDAO{
 
     //implement the findAll method
     @Override
-    public List<Budget> findAll(Integer id) {
+    public List<Budget> findAll(Long id) {
         //create the query to retrieve all the budgets
         TypedQuery<Budget> theQuery = entityManager.createQuery("FROM Budget b WHERE b.user_id = :userId ", Budget.class);
         theQuery.setParameter("userId", id);
@@ -32,7 +32,7 @@ public class BudgetDAOImpl implements BudgetDAO{
     }
 
     @Override
-    public List<Budget> findByUserIdAndMonthAndYear(Integer userId, Integer month, Integer year) {
+    public List<Budget> findByUserIdAndMonthAndYear(Long userId, Integer month, Integer year) {
         TypedQuery<Budget> theQuery = entityManager.createQuery(
             "FROM Budget b WHERE b.user_id = :userId AND b.month = :month AND b.year = :year", 
             Budget.class
@@ -64,7 +64,7 @@ public class BudgetDAOImpl implements BudgetDAO{
     }
 
     @Override
-    public BigDecimal calculateUsedAmount(String userId, String category, int month, int year) {
+    public BigDecimal calculateUsedAmount(Long userId, String category, int month, int year) {
         String jpql = """
             SELECT COALESCE(SUM(ABS(t.amount)), 0) 
             FROM Transaction t 

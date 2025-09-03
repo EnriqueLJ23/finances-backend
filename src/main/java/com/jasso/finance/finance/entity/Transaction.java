@@ -15,7 +15,7 @@ public class Transaction {
     private int id;
 
     @Column(name = "user_id")
-    private String user_id;
+    private Long user_id;
 
     @Column(name = "amount")
     private BigDecimal amount;
@@ -35,7 +35,7 @@ public class Transaction {
     //constructors
     public Transaction(){}
 
-    public Transaction(String user_id, BigDecimal amount, String type, String category, String description, LocalDate date) {
+    public Transaction(Long user_id, BigDecimal amount, String type, String category, String description, LocalDate date) {
         this.user_id = user_id;
         this.amount = amount;
         this.type = type;
@@ -47,11 +47,11 @@ public class Transaction {
     //getter and setters
 
 
-    public String getUser_id() {
+    public Long getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(String user_id) {
+    public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
 

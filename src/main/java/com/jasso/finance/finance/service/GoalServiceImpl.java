@@ -19,12 +19,12 @@ public class GoalServiceImpl implements GoalService {
     }
 
     @Override
-    public List<Goal> findAll(Integer id) {
+    public List<Goal> findAll(Long id) {
         return goalDAO.findAll(id);
     }
 
     @Override
-    public List<Goal> findByUserIdAndMonthAndYear(Integer userId, Integer month, Integer year) {
+    public List<Goal> findByUserIdAndMonthAndYear(Long userId, Integer month, Integer year) {
         return goalDAO.findByUserIdAndMonthAndYear(userId, month, year);
     }
 

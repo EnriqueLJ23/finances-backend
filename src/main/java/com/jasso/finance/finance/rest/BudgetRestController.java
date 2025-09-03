@@ -30,15 +30,15 @@ public class BudgetRestController {
         Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
         
         if (month != null && year != null) {
-            return budgetService.findByUserIdAndMonthAndYear(Integer.valueOf(String.valueOf(authenticatedUserId)), month, year);
+            return budgetService.findByUserIdAndMonthAndYear(authenticatedUserId, month, year);
         }
-        return budgetService.findAll(Integer.valueOf(String.valueOf(authenticatedUserId)));
+        return budgetService.findAll(authenticatedUserId);
     }
 
     @PostMapping("/budgets")
     public Budget addBudget(@RequestBody Budget theBudget){
         Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
-        theBudget.setUser_id(String.valueOf(authenticatedUserId));
+        theBudget.setUser_id(authenticatedUserId);
         Budget newBudget = budgetService.save(theBudget);
         return newBudget;
     }
@@ -52,12 +52,12 @@ public class BudgetRestController {
             throw new RuntimeException("Budget id not found - " + budgetId);
         }
         
-        if(!existingBudget.getUser_id().equals(String.valueOf(authenticatedUserId))){
+        if(!existingBudget.getUser_id().equals(authenticatedUserId)){
             throw new SecurityException("Unauthorized access to budget");
         }
         
         theBudget.setId(budgetId);
-        theBudget.setUser_id(String.valueOf(authenticatedUserId));
+        theBudget.setUser_id(authenticatedUserId);
         Budget updatedBudget = budgetService.save(theBudget);
         return updatedBudget;
     }
@@ -71,7 +71,7 @@ public class BudgetRestController {
             throw new RuntimeException("Budget id not found - " + budgetId);
         }
         
-        if(!tempBudget.getUser_id().equals(String.valueOf(authenticatedUserId))){
+        if(!tempBudget.getUser_id().equals(authenticatedUserId)){
             throw new SecurityException("Unauthorized access to budget");
         }
         

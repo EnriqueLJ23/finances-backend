@@ -24,7 +24,7 @@ public class TransactionRestController {
     @GetMapping("/transactions")
     public List<Transaction> getTransactions() {
         Long authenticatedUserId = SecurityUtil.getAuthenticatedUserId();
-        return transactionService.findByUserId(authenticatedUserId.intValue());
+        return transactionService.findByUserId(authenticatedUserId);
     }
 
     @GetMapping("/transactions/{transactionId}")
@@ -36,7 +36,7 @@ public class TransactionRestController {
             throw new RuntimeException("Transaction id not found - " + transactionId);
         }
         
-        if (!theTransaction.getUser_id().equals(String.valueOf(authenticatedUserId))) {
+        if (!theTransaction.getUser_id().equals(authenticatedUserId)) {
             throw new SecurityException("Unauthorized access to transaction");
         }
         
@@ -49,7 +49,7 @@ public class TransactionRestController {
         
         // Force ID to 0 in case it's passed, this will ensure creation of new transaction
         theTransaction.setId(0);
-        theTransaction.setUser_id(String.valueOf(authenticatedUserId));
+        theTransaction.setUser_id(authenticatedUserId);
         transactionService.save(theTransaction);
         return theTransaction;
     }
@@ -63,13 +63,13 @@ public class TransactionRestController {
             throw new RuntimeException("Transaction id not found - " + transactionId);
         }
         
-        if (!existingTransaction.getUser_id().equals(String.valueOf(authenticatedUserId))) {
+        if (!existingTransaction.getUser_id().equals(authenticatedUserId)) {
             throw new SecurityException("Unauthorized access to transaction");
         }
         
         // Set the ID from path variable to ensure we're updating the correct transaction
         theTransaction.setId(transactionId);
-        theTransaction.setUser_id(String.valueOf(authenticatedUserId));
+        theTransaction.setUser_id(authenticatedUserId);
         transactionService.save(theTransaction);
         return theTransaction;
     }
@@ -83,7 +83,7 @@ public class TransactionRestController {
             throw new RuntimeException("Transaction id not found - " + transactionId);
         }
         
-        if (!tempTransaction.getUser_id().equals(String.valueOf(authenticatedUserId))) {
+        if (!tempTransaction.getUser_id().equals(authenticatedUserId)) {
             throw new SecurityException("Unauthorized access to transaction");
         }
         

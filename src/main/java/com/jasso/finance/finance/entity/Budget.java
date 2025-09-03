@@ -13,7 +13,7 @@ public class Budget {
     private int id;
 
     @Column(name = "user_id")
-    private String user_id;
+    private Long user_id;
 
     @Column(name = "category")
     private String category;
@@ -35,7 +35,7 @@ public class Budget {
 
     //and one for the other data
 
-    public Budget(String user_id, String category, BigDecimal  amount, int month, int year) {
+    public Budget(Long user_id, String category, BigDecimal  amount, int month, int year) {
         this.user_id = user_id;
         this.category = category;
         this.amount = amount;
@@ -55,11 +55,11 @@ public class Budget {
         this.id = id;
     }
 
-    public String getUser_id() {
+    public Long getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(String user_id) {
+    public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
 

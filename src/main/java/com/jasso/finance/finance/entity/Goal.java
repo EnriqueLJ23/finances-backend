@@ -15,7 +15,7 @@ public class Goal {
     private int id;
 
     @Column(name = "user_id")
-    private int user_id;
+    private Long user_id;
 
     @Column(name = "title")
     private String title;
@@ -33,7 +33,7 @@ public class Goal {
     //define the contructors
     public Goal(){}
 
-    public Goal(int user_id, String title, BigDecimal target_amount, BigDecimal current_amount, LocalDate date) {
+    public Goal(Long user_id, String title, BigDecimal target_amount, BigDecimal current_amount, LocalDate date) {
         this.user_id = user_id;
         this.title = title;
         this.target_amount = target_amount;
@@ -52,11 +52,11 @@ public class Goal {
         this.id = id;
     }
 
-    public int getUser_id() {
+    public Long getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
 

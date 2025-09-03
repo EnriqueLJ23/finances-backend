@@ -25,7 +25,7 @@ public class TransactionServiceImpl implements TransactionService{
     }
     
     @Override
-    public List<Transaction> findByUserId(Integer userId) {
+    public List<Transaction> findByUserId(Long userId) {
         return transactionDAO.findByUserId(userId);
     }
 

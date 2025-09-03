@@ -20,7 +20,7 @@ public class BudgetServiceImpl implements BudgetService{
     }
 
     @Override
-    public List<Budget> findAll(Integer id) {
+    public List<Budget> findAll(Long id) {
         List<Budget> budgets = budgetDAO.findAll(id);
         for (Budget budget : budgets) {
             BigDecimal usedAmount = budgetDAO.calculateUsedAmount(
@@ -35,7 +35,7 @@ public class BudgetServiceImpl implements BudgetService{
     }
 
     @Override
-    public List<Budget> findByUserIdAndMonthAndYear(Integer userId, Integer month, Integer year) {
+    public List<Budget> findByUserIdAndMonthAndYear(Long userId, Integer month, Integer year) {
         List<Budget> budgets = budgetDAO.findByUserIdAndMonthAndYear(userId, month, year);
         for (Budget budget : budgets) {
             BigDecimal usedAmount = budgetDAO.calculateUsedAmount(

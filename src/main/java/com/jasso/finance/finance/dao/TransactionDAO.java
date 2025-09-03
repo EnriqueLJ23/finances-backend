@@ -8,7 +8,7 @@ import java.util.List;
 public interface TransactionDAO {
     List<Transaction> findAll();
     
-    List<Transaction> findByUserId(Integer userId);
+    List<Transaction> findByUserId(Long userId);
 
     Transaction findById(Integer id);
 

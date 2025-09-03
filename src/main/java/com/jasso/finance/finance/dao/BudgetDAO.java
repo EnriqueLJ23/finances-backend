@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface BudgetDAO {
 
-    List<Budget> findAll(Integer id);
+    List<Budget> findAll(Long id);
     
-    List<Budget> findByUserIdAndMonthAndYear(Integer userId, Integer month, Integer year);
+    List<Budget> findByUserIdAndMonthAndYear(Long userId, Integer month, Integer year);
 
     Budget findById(Integer id);
 
@@ -17,5 +17,5 @@ public interface BudgetDAO {
 
     void remove(Integer id);
 
-    BigDecimal calculateUsedAmount(String userId, String category, int month, int year);
+    BigDecimal calculateUsedAmount(Long userId, String category, int month, int year);
 }
