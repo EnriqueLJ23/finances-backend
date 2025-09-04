@@ -1,28 +1,25 @@
-# Use OpenJDK 17 as base image (slim version for smaller size)
-FROM openjdk:17-jdk-slim
+# Base image with JDK 17 (Temurin is the recommended replacement for OpenJDK images)
+FROM eclipse-temurin:17-jdk-jammy
 
 # Set working directory
 WORKDIR /app
 
-# Copy Maven wrapper and pom.xml first for better caching
+# Copy Maven wrapper & config first for dependency caching
 COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 
-# Make mvnw executable
-RUN chmod +x ./mvnw
+# Make mvnw executable & download dependencies (cached if pom.xml doesn't change)
+RUN chmod +x ./mvnw && ./mvnw dependency:go-offline -B
 
-# Download dependencies (this layer will be cached if pom.xml doesn't change)
-RUN ./mvnw dependency:go-offline -B
-
-# Copy source code
+# Copy the source code
 COPY src src
 
-# Build the application
+# Build the app
 RUN ./mvnw clean package -DskipTests
 
-# Expose port (Render will use the PORT environment variable)
-EXPOSE ${PORT:-8080}
+# Expose Render's dynamic port
+EXPOSE 8080
 
-# Run the application
+# Run the app, binding to $PORT
 CMD ["java", "-jar", "-Dserver.port=${PORT:-8080}", "target/finance-0.0.1-SNAPSHOT.jar"]

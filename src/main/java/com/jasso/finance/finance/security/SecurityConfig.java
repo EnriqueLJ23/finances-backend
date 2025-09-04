@@ -1,6 +1,7 @@
 package com.jasso.finance.finance.security;
 import com.jasso.finance.finance.jwt.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -25,6 +26,10 @@ import java.util.List;
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authProvider;
+
+    @Value("${app.frontend.url:http://localhost:4200}")
+    private String frontendUrl;
+
     @Autowired
     public SecurityConfig(JwtAuthenticationFilter thefilter,AuthenticationProvider theAuthProvider){
         jwtAuthenticationFilter = thefilter;
@@ -51,9 +56,17 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+
+        // Allow multiple origins including your Netlify URL
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:4200",           // Local development
+                frontendUrl                       // Environment variable
+        ));
+
         configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "OPTIONS", "DELETE", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);  // Important for JWT tokens
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 
